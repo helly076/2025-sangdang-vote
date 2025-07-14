@@ -55,7 +55,7 @@ body {
     box-sizing: border-box;
     border-width:2px 2px 2px 2px;
     border-color:#ffffff;
-    border-style:dashed;
+    border-style: none;
     width : 350px;
     height: 600px;
      display: block; 
@@ -72,7 +72,7 @@ body {
   box-sizing: border-box;
     border-width:2px 2px 2px 2px;
     border-color:#ffffff;
-    border-style:dashed;
+    border-style: none;
     width : 700px;
     height: 100px;
     display: block; 
