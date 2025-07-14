@@ -1,0 +1,118 @@
+@font-face {
+    font-family: 'Ownglyph_ParkDaHyun';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/Ownglyph_ParkDaHyun.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 65vh;
+  background-color: #000000;
+}
+
+/* 제목 고정 부분만 추가 */
+.title {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: empty;
+  color: #ffffff;
+  text-align: center;
+  font-size: 65px;
+  z-index: 1000;
+  padding-top: 110px;
+  margin-bottom: 30px;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: empty;
+  color: #ffffff;
+  text-align: center;
+  font-size: 20px;
+  z-index: 1000;
+  padding-top: 90px;
+  margin-bottom: 30px;
+}
+
+
+.boxfox{
+    box-sizing: border-box;
+    border-width:2px 2px 2px 2px;
+    border-color:#ffffff;
+    border-style:dashed;
+    width : 400px;
+    height: 400px;
+     display: block; 
+    text-align: center;
+    line-height: 100px;
+    color : rgb(255, 255, 255); 
+    font-size : 40px; 
+    background-color: #242424;
+    text-decoration: none;
+    
+}
+
+.votebox{
+  box-sizing: border-box;
+    border-width:2px 2px 2px 2px;
+    border-color:#ffffff;
+    border-style:dashed;
+    width : 800px;
+    height: 100px;
+    display: block; 
+    text-align: center;
+    line-height: 100px;
+    color : rgb(255, 255, 255); 
+    font-size : 40px; 
+    background-color: #565a62;
+    /* margin: 0 auto; */
+    
+}
+
+.container2 {
+  display: grid;
+  grid-template-columns: repeat(2, 400px);
+  grid-auto-rows: 400px;
+  gap: 70px;
+  padding-top: 200px;
+  
+}
+
+.onlycontainer{
+  display: flex;
+  justify-content: center;
+  width: 100%;  
+  grid-auto-rows: 400px;
+}
+
+.boxfox:not(.empty):active{
+    /* display: block; */
+    /* font size: 20px; */
+    /* color: light gray; */
+    /* padding: 10px; */
+    /* text-align: center; */
+    background-color: black;
+    /* background-color: empty; */
+}
+
+.boxfox:not(.empty):hover {
+  background-color:  #f5efefce;
+}
+
+
