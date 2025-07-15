@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>상당고 투표 관리자 페이지</title>
+  <style>
+    body {
+      font-family: "Malgun Gothic", Arial, sans-serif;
+      max-width: 700px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #000;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+      color: #ddd;
+      text-align: center;
+    }
+    h1, h2 {
+      color: #fff;
+    }
+    input[type="text"], input[type="password"] {
+      width: 70%;
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 5px;
+      border: 1px solid #555;
+      margin-bottom: 10px;
+      background: #111;
+      color: #eee;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    button {
+      display: inline-block;
+      margin: 5px 10px;
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    button:hover {
+      background-color: #3498db;
+    }
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      background: #111;
+      color: #eee;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #444;
+      text-align: center;
+    }
+    th {
+      background-color: #2980b9;
+      color: white;
+    }
+    tr:hover {
+      background-color: #333;
+    }
+    tr.selected {
+      background-color: #555 !important;
+    }
+    #message {
+      text-align: center;
+      margin-top: 10px;
+      color: #f39c12;
+      min-height: 20px;
+    }
+    #qrCodeContainer {
+      margin: 20px auto;
+      width: 200px;
+      height: 200px;
+      border: 2px solid #2980b9;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #111;
+    }
+  </style>
+</head>
+<body>
+  <h1>상당고 투표 관리자</h1>
+
+  <input type="password" id="adminPw" placeholder="관리자 비밀번호 입력" autocomplete="off" />
+
+  <input type="text" id="newOption" placeholder="새로운 선택지 입력" autocomplete="off" />
+  <button id="btnAddOption">선택지 추가</button>
+  <button id="btnDeleteOption" disabled>선택지 삭제</button>
+
+  <button id="btnStart">투표 시작</button>
+  <button id="btnEnd">투표 종료</button>
+  <button id="btnViewResult">투표 결과 보기</button>
+  <button id="btnClearVotes">투표 기록 초기화</button>
+
+  <div id="message"></div>
+
+  <table id="optionsTable" style="margin-top: 20px;">
+    <thead>
+      <tr>
+        <th>선택지 ID</th>
+        <th>선택지</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <table id="resultTable" style="display:none; margin-top: 20px;">
+    <thead>
+      <tr>
+        <th>선택지</th>
+        <th>득표수</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+    <tfoot>
+      <tr>
+        <th>총 투표수</th>
+        <th id="totalVotesCell"></th>
+      </tr>
+    </tfoot>
+  </table>
+
+  <h2>투표 QR코드</h2>
+  <div id="qrCodeContainer">
+    <span>QR코드 로딩중...</span>
+  </div>
+  <button id="btnLoadQR" style="margin-top: 10px;">QR코드 새로고침</button>
+
+  <script>
+    const pwInput = document.getElementById("adminPw");
+    const newOptionInput = document.getElementById("newOption");
+    const btnAddOption = document.getElementById("btnAddOption");
+    const btnDeleteOption = document.getElementById("btnDeleteOption");
+    const btnStart = document.getElementById("btnStart");
+    const btnEnd = document.getElementById("btnEnd");
+    const btnViewResult = document.getElementById("btnViewResult");
+    const btnClearVotes = document.getElementById("btnClearVotes");
+    const messageDiv = document.getElementById("message");
+    const optionsTable = document.getElementById("optionsTable");
+    const optionsTbody = optionsTable.querySelector("tbody");
+    const resultTable = document.getElementById("resultTable");
+    const resultTbody = resultTable.querySelector("tbody");
+    const totalVotesCell = document.getElementById("totalVotesCell");
+    const qrCodeContainer = document.getElementById("qrCodeContainer");
+    const btnLoadQR = document.getElementById("btnLoadQR");
+
+    let selectedOptionId = null;
+
+    function clearMessage() {
+      messageDiv.textContent = "";
+    }
+
+    function showMessage(text, color = "#f39c12") {
+      messageDiv.style.color = color;
+      messageDiv.textContent = text;
+    }
+
+    async function loadOptions() {
+      clearMessage();
+      const pw = pwInput.value.trim();
+      if (!pw) {
+        showMessage("비밀번호를 입력하세요.");
+        optionsTbody.innerHTML = "";
+        btnDeleteOption.disabled = true;
+        return;
+      }
+      try {
+        const res = await fetch(`/admin/options?pw=${encodeURIComponent(pw)}`);
+        const data = await res.json();
+        if (data.status !== "ok") {
+          showMessage(data.message);
+          optionsTbody.innerHTML = "";
+          btnDeleteOption.disabled = true;
+          return;
+        }
+
+        optionsTbody.innerHTML = "";
+        selectedOptionId = null;
+        btnDeleteOption.disabled = true;
+        data.options.forEach(opt => {
+          const tr = document.createElement("tr");
+          tr.dataset.id = opt.id;
+
+          const tdId = document.createElement("td");
+          tdId.textContent = opt.id;
+          const tdText = document.createElement("td");
+          tdText.textContent = opt.option_text;
+
+          tr.appendChild(tdId);
+          tr.appendChild(tdText);
+
+          tr.style.cursor = "pointer";
+          tr.addEventListener("click", () => {
+            [...optionsTbody.children].forEach(row => row.classList.remove("selected"));
+            tr.classList.add("selected");
+            selectedOptionId = opt.id;
+            btnDeleteOption.disabled = false;
+          });
+
+          optionsTbody.appendChild(tr);
+        });
+      } catch {
+        showMessage("서버 오류가 발생했습니다.");
+      }
+    }
+
+    btnAddOption.addEventListener("click", async () => {
+      clearMessage();
+      const pw = pwInput.value.trim();
+      const option = newOptionInput.value.trim();
+      if (!pw || !option) {
+        showMessage("비밀번호와 선택지를 입력하세요.");
+        return;
+      }
+      try {
+        const res = await fetch("/admin/addOption", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pw, option }),
+        });
+        const data = await res.json();
+        if (data.status === "ok") {
+          showMessage(data.message, "lightgreen");
+          newOptionInput.value = "";
+          await loadOptions();
+        } else {
+          showMessage(data.message);
+        }
+      } catch {
+        showMessage("서버 오류가 발생했습니다.");
+      }
+    });
+
+    btnDeleteOption.addEventListener("click", async () => {
+      clearMessage();
+      if (!selectedOptionId) {
+        showMessage("삭제할 선택지를 선택하세요.");
+        return;
+      }
+      if (!confirm("정말 선택지를 삭제하시겠습니까?")) return;
+
+      const pw = pwInput.value.trim();
+      try {
+        const res = await fetch("/admin/deleteOption", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pw, optionId: selectedOptionId }),
+        });
+        const data = await res.json();
+        if (data.status === "ok") {
+          showMessage(data.message, "lightgreen");
+          selectedOptionId = null;
+          btnDeleteOption.disabled = true;
+          await loadOptions();
+        } else {
+          showMessage(data.message);
+        }
+      } catch {
+        showMessage("서버 오류가 발생했습니다.");
+      }
+    });
+
+    btnStart.addEventListener("click", async () => {
+      clearMessage();
+      const pw = pwInput.value.trim();
+      if (!pw) {
+        showMessage("비밀번호를 입력하세요.");
+        return;
+      }
+      try {
+        const res = await fetch("/admin/start", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pw }),
+        });
+        const data = await res.json();
+        if (data.status === "ok") {
+          showMessage(data.message, "lightgreen");
+        } else {
+          showMessage(data.message);
+        }
+      } catch {
+        showMessage("서버 오류가 발생했습니다.");
+      }
+    });
+
+    btnEnd.addEventListener("click", async () => {
+      clearMessage();
+      const pw = pwInput.value.trim();
+      if (!pw) {
+        showMessage("비밀번호를 입력하세요.");
+        return;
+      }
+      try {
+        const res = await fetch("/admin/end", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pw }),
+        });
+        const data = await res.json();
+        if (data.status === "ok") {
+          showMessage(data.message, "lightgreen");
+        } else {
+          showMessage(data.message);
+        }
+      } catch {
+        showMessage("서버 오류가 발생했습니다.");
+      }
+    });
+
+    btnViewResult.addEventListener("click", async () => {
+      clearMessage();
+      const pw = pwInput.value.trim();
+      if (!pw) {
+        showMessage("비밀번호를 입력하세요.");
+        return;
+      }
+      try {
+        const res = await fetch(`/admin/results?pw=${encodeURIComponent(pw)}`);
+        const data = await res.json();
+        if (data.status !== "ok") {
+          showMessage(data.message);
+          resultTable.style.display = "none";
+          return;
+        }
+
+        resultTbody.innerHTML = "";
+        data.results.forEach(row => {
+          const tr = document.createElement("tr");
+          const tdOption = document.createElement("td");
+          tdOption.textContent = row.choice;
+          const tdCount = document.createElement("td");
+          tdCount.textContent = row.count;
+          tr.appendChild(tdOption);
+          tr.appendChild(tdCount);
+          resultTbody.appendChild(tr);
+        });
+
+        totalVotesCell.textContent = data.totalVotes;
+        resultTable.style.display = "table";
+      } catch {
+        showMessage("서버 오류가 발생했습니다.");
+      }
+    });
+
+    btnClearVotes.addEventListener("click", async () => {
+      clearMessage();
+      if (!confirm("정말 투표 기록을 초기화하시겠습니까?")) return;
+
+      const pw = pwInput.value.trim();
+      if (!pw) {
+        showMessage("비밀번호를 입력하세요.");
+        return;
+      }
+
+      try {
+        const res = await fetch("/admin/clearVotes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pw }),
+        });
+        const data = await res.json();
+        if (data.status === "ok") {
+          showMessage(data.message, "lightgreen");
+          resultTable.style.display = "none";
+        } else {
+          showMessage(data.message);
+        }
+      } catch {
+        showMessage("서버 오류가 발생했습니다.");
+      }
+    });
+
+    async function loadQRCode() {
+      const pw = pwInput.value.trim();
+      if (!pw) {
+        qrCodeContainer.innerHTML = "<span style='color:red;'>비밀번호를 입력하세요.</span>";
+        return;
+      }
+
+      qrCodeContainer.innerHTML = "<span>QR코드 로딩중...</span>";
+      try {
+        const res = await fetch(`/admin/qrcode?pw=${encodeURIComponent(pw)}`);
+        const data = await res.json();
+        if (data.status !== "ok") {
+          qrCodeContainer.innerHTML = `<span style="color:red;">${data.message}</span>`;
+          return;
+        }
+        qrCodeContainer.innerHTML = `<img src="${data.qrcode}" alt="투표 QR코드" style="width: 180px; height: 180px;">`;
+      } catch {
+        qrCodeContainer.innerHTML = "<span style='color:red;'>서버 오류가 발생했습니다.</span>";
+      }
+    }
+
+    btnLoadQR.addEventListener("click", loadQRCode);
+
+    pwInput.addEventListener("input", () => {
+      qrCodeContainer.innerHTML = "";
+      loadOptions();
+    });
+  </script>
+</body>
+</html>

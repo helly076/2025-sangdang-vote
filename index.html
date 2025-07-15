@@ -1,39 +1,336 @@
 <!DOCTYPE html>
 <html lang="ko">
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewprot" content="width=device-width, intial-scale=1.0">
-		<title>2025 수업량 유연화</title>
-    <meta property="og:title" content="수업량 유연화">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://2025-sangdang-vote.cloud">
-	
-		oudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
-	<link rel="stylesheet" href="dd.css">
+<head>
+  <meta charset="UTF-8" />
+  <title>상당고 복면가왕 투표</title>
+  <meta name="viewport" content="width=device-width", intial-scale="1.0">
+  <meta property="og:title" content="상당고 복면가왕 투표">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://2025-sangdang-vote.cloud">
+  <style>
+    body {
+      font-family: 'Malgun Gothic', Arial, sans-serif;
+      background-color: #111;
+      color: white;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 0.2em;
+      color: #ffcc00;
+    }
+
+    .subtitle {
+      font-size: 1.4em;
+      margin-bottom: 30px;
+      color: #ffffffcc;
+    }
+
+    #studentID {
+      padding: 15px;
+      font-size: 1.2em;
+      width: 80%;
+      max-width: 300px;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      background-color: #222;
+      color: white;
+    }
+
+    #message {
+      min-height: 24px;
+      color: #ff6b6b;
+      margin-bottom: 20px;
+    }
+
+    .option-btn {
+      /* display: inline-flex; */
+      /* align-items: center; */
+      /* justify-content: center; */
+      /* gap: 10px; */
+      /* background-color: #222; */
+      /* color: white; */
+      /* border: 2px solid #444; */
+      /* border-radius: 12px; */
+      /* padding: 20px 30px; */
+      /* font-size: 1.2em; */
+      /* margin: 10px; */
+      /* cursor: pointer; */
+      /* transition: background 0.3s, transform 0.2s; */
+      /* min-width: 200px; */
+      /* min-height: 100px; */
+      box-sizing: border-box;
+    border-width:2px 2px 2px 2px;
+    border-color:#ffffff;
+    border-style: none;
+    width : 350px;
+    height: 600px;
+    text-align: center;
+    line-height: 200px;
+    color : rgb(255, 255, 255); 
+    font-size : 40px; 
+    background-color: #242424;
+    text-decoration: none;
+    overflow: hidden;
+    margin: 10px;
+    }
+
+    .option-btn:hover {
+      background-color: #333;
+      transform: scale(1.03);
+    }
+
+    .option-btn.selected {
+      border-color: #ffcc00;
+      background-color: #333;
+    }
+
+    .option-btn.disabled {
+      background-color: #555 !important;
+      color: #aaa !important;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    #btnVote {
+      /* margin-top: 20px; */
+      /* background-color: #ffcc00; */
+      /* color: black; */
+      /* font-weight: bold; */
+      /* font-size: 1.2em; */
+      /* border: none; */
+      /* border-radius: 12px; */
+      /* padding: 15px 30px; */
+      /* cursor: pointer; */
+      /* transition: background 0.3s; */
+        box-sizing: border-box;
+    border-width:2px 2px 2px 2px;
+    border-color:#ffffff;
+    border-style: none;
+    width : 700px;
+    height: 100px;
+    display: block; 
+    text-align: center;
+    line-height: 100px;
+    color : rgb(255, 255, 255); 
+    font-size : 40px; 
+    background-color: #565a62;
+    text-decoration: none;
+    margin-top : 20px;
+    }
+
+
+    #btnVote:hover:enabled {
+      background-color: #ffe066;
+    }
+    .container2 {
+  display: grid;
+  grid-template-columns: repeat(2, 400px);
+  grid-auto-rows: 400px;
+  gap: 70px;
+  padding-top: 300px;
+  
+    }
+
+    #voteSection {
+      display: none;
+    }
+
+    #voteCompletedMsg, #voteEndedMsg {
+      font-size: 1.1em;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    #voteCompletedMsg {
+      color: #00e676;
+    }
+
+    #voteEndedMsg {
+      color: #ff5252;
+    }
+
+  </style>
 </head>
 <body>
-  <!-- background-color: lightblue; -->
-	<font-family: 'Ownglyph_ParkDaHyun', sans-serif;>
-    <h1 class="header">2025 상당고등학교 용천제 </h1>
-	<h1 class="title"> 복면가왕 투표</h1>
-  <div class="container2">
-    <a href="S.html" class="boxfox">나이트퓨리 ☎<br>
-      <img src="nightf.png" alt="설명" style="width: 100; height: auto;">
-       </a>
-    <!-- <a href="S.html" class="boxfox"> -->
-      <!-- <img src="nightf.png" alt="설명" style="width: 100; height: auto;"> -->
-    <!-- </a> -->
-    <!-- <p1> vs</p1> -->
-     <!-- <p> hi</p> -->
-    <a href="V.html" class="boxfox">라이트퓨리 ☎<br>
-      <img src="whitef.png" alt="설명" style="width: 100; height: auto;">
-    </a>
-    
+
+  <h1>상당고등학교 용천제</h1>
+  <div class="subtitle">복면가왕 투표</div>
+
+  <div id="step1">
+    <input type="text" id="studentID" placeholder="학번 5자리 입력 후 엔터" maxlength="5" />
+    <div id="message"></div>
   </div>
-  <div class="onlycontainer"> 
-     <a href="sigma.html" class="votebox">투표하기</a>
+
+  <div id="voteSection">
+    <div id="voteOptions"></div>
+    <button id="btnVote" disabled>투표하기</button>
+    <div id="voteCompletedMsg" style="display:none;">투표가 완료되었습니다.</div>
+    <div id="voteEndedMsg" style="display:none;">투표가 종료되었습니다.</div>
   </div>
-  
+
+  <script>
+    let currentStudentID = null;
+    let selectedOption = null;
+    let votedAlready = false;
+
+    const studentIDInput = document.getElementById("studentID");
+    const messageDiv = document.getElementById("message");
+    const voteSection = document.getElementById("voteSection");
+    const voteOptionsDiv = document.getElementById("voteOptions");
+    const btnVote = document.getElementById("btnVote");
+    const voteCompletedMsg = document.getElementById("voteCompletedMsg");
+    const voteEndedMsg = document.getElementById("voteEndedMsg");
+    const step1Div = document.getElementById("step1");
+
+    studentIDInput.addEventListener("keyup", function(e) {
+      if (e.key === "Enter") {
+        checkStudentID();
+      }
+    });
+
+    async function checkStudentID() {
+      const studentID = studentIDInput.value.trim();
+      if (studentID.length !== 5) {
+        messageDiv.innerText = "학번 5자리를 입력하세요!";
+        return;
+      }
+
+      try {
+        const res = await fetch("/checkID", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ studentID })
+        });
+        const data = await res.json();
+
+        if (data.status === "ended") {
+          messageDiv.innerText = data.message;
+          step1Div.style.display = "block";
+          voteSection.style.display = "none";
+          return;
+        }
+
+        if (data.status === "error") {
+          messageDiv.innerText = data.message;
+          return;
+        }
+
+        if (data.status === "voted") {
+          messageDiv.innerText = "";
+          votedAlready = true;
+          currentStudentID = studentID;
+          step1Div.style.display = "none";
+          await loadVoteOptions(true);
+          return;
+        }
+
+        if (data.status === "ok") {
+          votedAlready = false;
+          currentStudentID = studentID;
+          messageDiv.innerText = "";
+          step1Div.style.display = "none";
+          await loadVoteOptions(false);
+        }
+      } catch {
+        messageDiv.innerText = "서버 오류가 발생했습니다.";
+      }
+    }
+
+    async function loadVoteOptions(disabled) {
+      voteSection.style.display = "block";
+      btnVote.disabled = true;
+      voteCompletedMsg.style.display = "none";
+      voteEndedMsg.style.display = "none";
+      selectedOption = null;
+
+      try {
+        const res = await fetch("/admin/options?pw=1234");
+        const data = await res.json();
+
+        if (!data.options || data.options.length < 2) {
+          messageDiv.innerText = "선택지가 부족하거나 투표가 준비되지 않았습니다.";
+          voteSection.style.display = "none";
+          step1Div.style.display = "block";
+          return;
+        }
+
+        voteOptionsDiv.innerHTML = "";
+        data.options.forEach(opt => {
+          const btn = document.createElement("button");
+          btn.classList.add("option-btn");
+          btn.textContent = opt.option_text;
+          btn.innerHTML = '<img src="nightf.png" alt="설명" style="width:50px; height:50px;"/>' ;
+
+        
+          if (disabled) {
+            btn.classList.add("disabled");
+            btn.disabled = true;
+          } else {
+            btn.addEventListener("click", () => {
+              selectOption(opt.option_text, btn);
+            });
+          }
+
+          voteOptionsDiv.appendChild(btn);
+        }); 
+
+        if (disabled) {
+          voteCompletedMsg.style.display = "block";
+          btnVote.style.display = "none";
+        } else {
+          btnVote.style.display = "inline-block";
+        }
+      } catch {
+        messageDiv.innerText = "선택지 불러오기 실패.";
+      }
+    }
+
+    function selectOption(text, btn) {
+      [...voteOptionsDiv.children].forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      selectedOption = text;
+      btnVote.disabled = false;
+    }
+
+    btnVote.addEventListener("click", async () => {
+      if (!selectedOption) return;
+
+      try {
+        const res = await fetch("/vote", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            studentID: currentStudentID,
+            choice: selectedOption
+          })
+        });
+        const data = await res.json();
+
+        if (data.status === "ok") {
+          voteCompletedMsg.style.display = "block";
+          btnVote.style.display = "none";
+          [...voteOptionsDiv.children].forEach(b => {
+            b.classList.add("disabled");
+            b.disabled = true;
+          });
+          messageDiv.innerText = "";
+          votedAlready = true;
+        } else if (data.status === "ended") {
+          voteEndedMsg.style.display = "block";
+          btnVote.style.display = "none";
+          messageDiv.innerText = "";
+        } else {
+          messageDiv.innerText = data.message;
+        }
+      } catch {
+        messageDiv.innerText = "서버 오류가 발생했습니다.";
+      }
+    });
+  </script>
 </body>
-</html> 
+</html>
